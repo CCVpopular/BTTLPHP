@@ -10,7 +10,29 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $student_id = $_POST['student_id'];
-    $advisor_id = $_POST['advisor_id'];
+    $advisor_id = !empty($_POST['advisor_id']) ? $_POST['advisor_id'] : null;
+    
+    // Validate student_id exists
+    $check_student = $conn->prepare("SELECT SinhVienID FROM SinhVien WHERE SinhVienID = ?");
+    $check_student->bind_param("i", $student_id);
+    $check_student->execute();
+    if ($check_student->get_result()->num_rows === 0) {
+        $_SESSION['error'] = "Sinh viên không tồn tại!";
+        header("Location: advisor_assignments.php");
+        exit;
+    }
+
+    // If advisor_id is provided, validate it exists
+    if ($advisor_id !== null) {
+        $check_advisor = $conn->prepare("SELECT GiangVienID FROM GiangVien WHERE GiangVienID = ?");
+        $check_advisor->bind_param("i", $advisor_id);
+        $check_advisor->execute();
+        if ($check_advisor->get_result()->num_rows === 0) {
+            $_SESSION['error'] = "Giảng viên không tồn tại!";
+            header("Location: advisor_assignments.php");
+            exit;
+        }
+    }
     
     // Check if assignment already exists
     $check_stmt = $conn->prepare("SELECT ID FROM SinhVienGiangVienHuongDan WHERE SinhVienID = ?");
@@ -19,19 +41,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = $check_stmt->get_result();
     
     if ($result->num_rows > 0) {
-        // Update existing assignment
-        $stmt = $conn->prepare("UPDATE SinhVienGiangVienHuongDan SET GiangVienID = ?, NgayBatDau = CURRENT_DATE WHERE SinhVienID = ?");
-        $stmt->bind_param("ii", $advisor_id, $student_id);
-    } else {
-        // Create new assignment
+        if ($advisor_id === null) {
+            // Remove assignment
+            $stmt = $conn->prepare("DELETE FROM SinhVienGiangVienHuongDan WHERE SinhVienID = ?");
+            $stmt->bind_param("i", $student_id);
+        } else {
+            // Update existing assignment
+            $stmt = $conn->prepare("UPDATE SinhVienGiangVienHuongDan SET GiangVienID = ?, NgayBatDau = CURRENT_DATE WHERE SinhVienID = ?");
+            $stmt->bind_param("ii", $advisor_id, $student_id);
+        }
+    } else if ($advisor_id !== null) {
+        // Create new assignment only if advisor_id is provided
         $stmt = $conn->prepare("INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau) VALUES (?, ?, CURRENT_DATE)");
         $stmt->bind_param("ii", $student_id, $advisor_id);
     }
     
-    if ($stmt->execute()) {
-        $_SESSION['success'] = "Phân công giảng viên hướng dẫn thành công!";
+    if (isset($stmt) && $stmt->execute()) {
+        $_SESSION['success'] = $advisor_id === null ? "Đã hủy phân công giảng viên hướng dẫn!" : "Phân công giảng viên hướng dẫn thành công!";
     } else {
-        $_SESSION['error'] = "Có lỗi xảy ra khi phân công giảng viên hướng dẫn!";
+        $_SESSION['error'] = "Có lỗi xảy ra khi xử lý phân công giảng viên hướng dẫn!";
     }
     
     header("Location: advisor_assignments.php");
