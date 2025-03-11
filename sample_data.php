@@ -10,8 +10,8 @@ function logSampleData($message) {
 $conn->begin_transaction();
 
 try {
-    // Insert admin user
-    $admin_password = password_hash('admin123', PASSWORD_DEFAULT);
+    // Insert admin user with simple credentials
+    $admin_password = password_hash('123456', PASSWORD_DEFAULT);
     $stmt = $conn->prepare("INSERT INTO Users (Username, Password, Email, Role) VALUES (?, ?, ?, ?)");
     $stmt->bind_param("ssss", $username, $admin_password, $email, $role);
 
@@ -25,7 +25,7 @@ try {
     $student_ids = [];
     $faculty_ids = [];
 
-    // Insert sample students
+    // Insert sample students with simple credentials
     $students = [
         ['Nguyễn Văn An', 'B2012345', '2002-05-15', 'CNTT2020A', 'van.an@student.edu', '0901234567'],
         ['Trần Thị Bình', 'B2012346', '2002-08-20', 'CNTT2020B', 'thi.binh@student.edu', '0901234568'],
@@ -35,15 +35,15 @@ try {
     $stmt = $conn->prepare("INSERT INTO SinhVien (HoTen, MaSinhVien, NgaySinh, Lop, Email, SoDienThoai) VALUES (?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssssss", $hoten, $masv, $ngaysinh, $lop, $email, $sodienthoai);
 
-    foreach ($students as $student) {
+    foreach ($students as $index => $student) {
         list($hoten, $masv, $ngaysinh, $lop, $email, $sodienthoai) = $student;
         $stmt->execute();
         $sinhvien_id = $conn->insert_id;
         $student_ids[] = $sinhvien_id;  // Store generated ID
 
-        // Create user account for student
-        $username = strtolower(explode('@', $email)[0]);
-        $password = password_hash($masv, PASSWORD_DEFAULT);
+        // Simplified student accounts
+        $username = "sv" . ($index + 1);  // sv1, sv2, sv3
+        $password = password_hash('123456', PASSWORD_DEFAULT);
         $role = 'student';
 
         $stmt2 = $conn->prepare("INSERT INTO Users (Username, Password, Email, Role, SinhVienID) VALUES (?, ?, ?, ?, ?)");
@@ -52,7 +52,7 @@ try {
         logSampleData("Added student: $hoten");
     }
 
-    // Insert sample faculty members
+    // Insert sample faculty members with simple credentials
     $faculty = [
         ['TS. Phạm Văn Đức', 'GV001', 'van.duc@faculty.edu', '0909123456', 'Công nghệ phần mềm'],
         ['PGS.TS. Lê Thị Em', 'GV002', 'thi.em@faculty.edu', '0909123457', 'Hệ thống thông tin'],
@@ -62,15 +62,15 @@ try {
     $stmt = $conn->prepare("INSERT INTO GiangVien (HoTen, MaGiangVien, Email, SoDienThoai, BoMon) VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param("sssss", $hoten, $magv, $email, $sodienthoai, $bomon);
 
-    foreach ($faculty as $teacher) {
+    foreach ($faculty as $index => $teacher) {
         list($hoten, $magv, $email, $sodienthoai, $bomon) = $teacher;
         $stmt->execute();
         $giangvien_id = $conn->insert_id;
         $faculty_ids[] = $giangvien_id;  // Store generated ID
 
-        // Create user account for faculty
-        $username = strtolower(explode('@', $email)[0]);
-        $password = password_hash($magv, PASSWORD_DEFAULT);
+        // Simplified faculty accounts
+        $username = "gv" . ($index + 1);  // gv1, gv2, gv3
+        $password = password_hash('123456', PASSWORD_DEFAULT);
         $role = 'faculty';
 
         $stmt2 = $conn->prepare("INSERT INTO Users (Username, Password, Email, Role, GiangVienID) VALUES (?, ?, ?, ?, ?)");
@@ -104,8 +104,8 @@ $conn->close();
 
 echo "<p>Thông tin đăng nhập mẫu:</p>";
 echo "<ul>";
-echo "<li>Admin: username = admin, password = admin123</li>";
-echo "<li>Sinh viên: username = van.an, password = B2012345</li>";
-echo "<li>Giảng viên: username = van.duc, password = GV001</li>";
+echo "<li>Admin: username = admin, password = 123456</li>";
+echo "<li>Sinh viên: username = sv1, password = 123456</li>";
+echo "<li>Giảng viên: username = gv1, password = 123456</li>";
 echo "</ul>";
 ?>
