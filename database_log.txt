@@ -614,3 +614,18 @@
 [2025-03-11 03:36:40] Users table Role column updated successfully
 [2025-03-11 03:36:40] Table LuanVan created successfully
 [2025-03-11 03:36:40] Table ThesisProgress created successfully
+[2025-03-11 03:45:09] Connected to database successfully
+[2025-03-11 03:45:09] Table SinhVien created successfully
+[2025-03-11 03:45:09] Table GiangVien created successfully
+[2025-03-11 03:45:09] Table SinhVienGiangVienHuongDan created successfully
+[2025-03-11 03:45:09] Table Users created successfully
+[2025-03-11 03:45:09] Users table Role column updated successfully
+[2025-03-11 03:45:09] Table LuanVan created successfully
+[2025-03-11 03:46:31] Connected to database successfully
+[2025-03-11 03:46:31] Table SinhVien created successfully
+[2025-03-11 03:46:32] Table GiangVien created successfully
+[2025-03-11 03:46:32] Table SinhVienGiangVienHuongDan created successfully
+[2025-03-11 03:46:32] Table Users created successfully
+[2025-03-11 03:46:32] Users table Role column updated successfully
+[2025-03-11 03:46:32] Table LuanVan created successfully
+[2025-03-11 03:46:32] Table ThesisProgress created successfully

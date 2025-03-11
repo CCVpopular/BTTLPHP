@@ -154,7 +154,7 @@ $sql_thesis_progress = "CREATE TABLE IF NOT EXISTS ThesisProgress (
     LuanVanID INT NOT NULL,
     TieuDe NVARCHAR(255) NOT NULL,
     NoiDung TEXT NOT NULL,
-    NgayCapNhat DATETIME DEFAULT CURRENT_TIMESTAMP,
+    NgayCapNhat TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     TrangThai ENUM('in_progress', 'completed', 'delayed') DEFAULT 'in_progress',
     NhanXet TEXT,
     FOREIGN KEY (LuanVanID) REFERENCES LuanVan(LuanVanID) ON DELETE CASCADE
