@@ -111,6 +111,15 @@ $username = $_SESSION['username'];
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card bg-info text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Báo cáo tiến độ</h5>
+                                        <p class="card-text">Xem báo cáo tiến độ luận văn</p>
+                                        <a href="thesis_reports.php" class="btn btn-light">Truy cập</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
