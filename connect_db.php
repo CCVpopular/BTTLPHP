@@ -7,10 +7,10 @@ function logMessage($message) {
 }
 
 // Database configuration
-$host = "localhost";
-$username = "root"; // Default MySQL username
-$password = ""; // Default MySQL password (empty for XAMPP)
-$db_name = "ThesisManagementDB"; // Name of the database to create
+$host = "sql12.freesqldatabase.com";
+$username = "sql12767009"; // Default MySQL username
+$password = "f4RHcxvTrw"; 
+$db_name = "sql12767009"; // Name of the database to create
 
 // Create connection to MySQL server (without database)
 $conn = new mysqli($host, $username, $password);
