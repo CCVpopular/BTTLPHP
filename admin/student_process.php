@@ -91,6 +91,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif ($action === 'edit') {
         $id = (int)$_POST['id'];
+        $hoten = trim($_POST['hoten']); // Match form field name
+        $masv = trim($_POST['masv']);   // Match form field name
+        $ngaysinh = trim($_POST['ngaysinh']);
+        $lop = trim($_POST['lop']);
+        $email = trim($_POST['email']);
+        $sodienthoai = trim($_POST['sodienthoai']);
+        
+        // Basic validation
+        if (empty($hoten) || empty($masv) || empty($lop) || empty($email)) {
+            $_SESSION['error'] = "Vui lòng điền đầy đủ thông tin bắt buộc";
+            header("Location: student_edit.php?id=" . $id);
+            exit;
+        }
         
         // Check if email exists for other students
         $stmt = $conn->prepare("SELECT SinhVienID FROM SinhVien WHERE Email = ? AND SinhVienID != ?");
@@ -108,10 +121,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("ssssssi", $hoten, $masv, $ngaysinh, $lop, $email, $sodienthoai, $id);
         
         if ($stmt->execute()) {
-            header("Location: students.php?msg=updated");
+            // Update Users table email if it exists
+            $stmt = $conn->prepare("UPDATE Users SET Email=? WHERE SinhVienID=?");
+            $stmt->bind_param("si", $email, $id);
+            $stmt->execute();
+            
+            $_SESSION['success'] = "Cập nhật thông tin sinh viên thành công!";
+            header("Location: students.php");
+            exit;
         } else {
             $_SESSION['error'] = "Lỗi khi cập nhật thông tin sinh viên: " . $stmt->error;
             header("Location: student_edit.php?id=" . $id);
+            exit;
         }
         $stmt->close();
     }

@@ -126,6 +126,34 @@ if ($student_id) {
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header">Giảng viên hướng dẫn</div>
+                                        <div class="card-body">
+                                            <?php
+                                            $advisor_query = "SELECT gv.* FROM GiangVien gv 
+                                                            JOIN SinhVienGiangVienHuongDan svgv ON gv.GiangVienID = svgv.GiangVienID 
+                                                            WHERE svgv.SinhVienID = ?";
+                                            $stmt = $conn->prepare($advisor_query);
+                                            $stmt->bind_param("i", $student_id);
+                                            $stmt->execute();
+                                            $advisor_result = $stmt->get_result();
+                                            $advisor = $advisor_result->fetch_assoc();
+                                            
+                                            if ($advisor): ?>
+                                                <h5>Thông tin giảng viên hướng dẫn:</h5>
+                                                <p><strong>Họ tên:</strong> <?php echo htmlspecialchars($advisor['HoTen']); ?></p>
+                                                <p><strong>Email:</strong> <?php echo htmlspecialchars($advisor['Email']); ?></p>
+                                                <p><strong>Số điện thoại:</strong> <?php echo htmlspecialchars($advisor['SoDienThoai']); ?></p>
+                                                <p><strong>Bộ môn:</strong> <?php echo htmlspecialchars($advisor['BoMon']); ?></p>
+                                            <?php else: ?>
+                                                <div class="alert alert-info">
+                                                    Bạn chưa được phân công giảng viên hướng dẫn.
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         <?php else: ?>
                             <div class="alert alert-warning">

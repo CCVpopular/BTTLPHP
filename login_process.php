@@ -34,17 +34,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             if ($user['Role'] == 'student' && $user['SinhVienID']) {
                 $_SESSION['sinhvien_id'] = $user['SinhVienID'];
-            } elseif ($user['Role'] == 'admin' && $user['GiangVienID']) {
+            } elseif ($user['Role'] == 'faculty' && $user['GiangVienID']) {
                 $_SESSION['giangvien_id'] = $user['GiangVienID'];
-            }
-            
-            // Redirect based on role
-            if ($user['Role'] == 'admin') {
+                header("Location: faculty/index.php");
+                exit;
+            } elseif ($user['Role'] == 'admin') {
                 header("Location: admin/index.php");
+                exit;
             } else {
                 header("Location: user/index.php");
+                exit;
             }
-            exit;
         } else {
             // Wrong password
             $_SESSION['login_error'] = "Mật khẩu không đúng";

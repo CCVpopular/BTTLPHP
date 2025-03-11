@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 require_once '../connect_db.php';
@@ -86,6 +85,7 @@ $username = $_SESSION['username'];
                         </div>
                         <div class="card-body">
                             <form action="student_process.php" method="POST">
+                                <input type="hidden" name="action" value="edit">
                                 <input type="hidden" name="id" value="<?php echo $student['SinhVienID']; ?>">
 
                                 <div class="mb-3">
@@ -126,7 +126,7 @@ $username = $_SESSION['username'];
 
                                 <div class="text-end">
                                     <a href="students.php" class="btn btn-secondary">Hủy</a>
-                                    <button type="submit" name="action" value="edit" class="btn btn-primary">Cập nhật</button>
+                                    <button type="submit" class="btn btn-primary">Cập nhật</button>
                                 </div>
                             </form>
                         </div>

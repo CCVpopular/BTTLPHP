@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 
@@ -100,6 +99,15 @@ $username = $_SESSION['username'];
                                         <h5 class="card-title">Quản lý luận văn</h5>
                                         <p class="card-text">Quản lý thông tin luận văn và phân công</p>
                                         <a href="thesis.php" class="btn btn-light">Truy cập</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card bg-primary text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Phân công hướng dẫn</h5>
+                                        <p class="card-text">Quản lý phân công giảng viên hướng dẫn cho sinh viên</p>
+                                        <a href="advisor_assignments.php" class="btn btn-light">Truy cập</a>
                                     </div>
                                 </div>
                             </div>

@@ -119,5 +119,52 @@ if ($conn->query($sql_users) === TRUE) {
     logMessage("Error creating Users table: " . $conn->error);
 }
 
+// Update Users table to include faculty role
+$sql_alter_users = "ALTER TABLE Users MODIFY COLUMN Role ENUM('student', 'admin', 'faculty') NOT NULL DEFAULT 'student'";
+if ($conn->query($sql_alter_users) === TRUE) {
+    logMessage("Users table Role column updated successfully");
+} else {
+    logMessage("Error updating Users table Role column: " . $conn->error);
+}
+
+// Create LuanVan (Thesis) table
+$sql_luan_van = "CREATE TABLE IF NOT EXISTS LuanVan (
+    LuanVanID INT AUTO_INCREMENT PRIMARY KEY,
+    TenDeTai NVARCHAR(255) NOT NULL,
+    MoTa TEXT,
+    SinhVienID INT,
+    GiangVienID INT,
+    TrangThai ENUM('pending', 'approved', 'rejected', 'completed') DEFAULT 'pending',
+    NgayDangKy DATE NOT NULL,
+    NgayPheDuyet DATE,
+    NhanXet TEXT,
+    FOREIGN KEY (SinhVienID) REFERENCES SinhVien(SinhVienID),
+    FOREIGN KEY (GiangVienID) REFERENCES GiangVien(GiangVienID)
+)";
+
+if ($conn->query($sql_luan_van) === TRUE) {
+    logMessage("Table LuanVan created successfully");
+} else {
+    logMessage("Error creating LuanVan table: " . $conn->error);
+}
+
+// Add ThesisProgress table for tracking progress
+$sql_thesis_progress = "CREATE TABLE IF NOT EXISTS ThesisProgress (
+    ProgressID INT AUTO_INCREMENT PRIMARY KEY,
+    LuanVanID INT NOT NULL,
+    TieuDe NVARCHAR(255) NOT NULL,
+    NoiDung TEXT NOT NULL,
+    NgayCapNhat DATETIME DEFAULT CURRENT_TIMESTAMP,
+    TrangThai ENUM('in_progress', 'completed', 'delayed') DEFAULT 'in_progress',
+    NhanXet TEXT,
+    FOREIGN KEY (LuanVanID) REFERENCES LuanVan(LuanVanID) ON DELETE CASCADE
+)";
+
+if ($conn->query($sql_thesis_progress) === TRUE) {
+    logMessage("Table ThesisProgress created successfully");
+} else {
+    logMessage("Error creating ThesisProgress table: " . $conn->error);
+}
+
 // $conn->close(); // Uncomment this when you're done with database operations
 ?>
